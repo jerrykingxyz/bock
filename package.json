@@ -1,0 +1,23 @@
+{
+  "name": "lazypack",
+  "version": "0.0.1",
+  "description": "lazy pack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jerrykingxyz/lazypack.git"
+  },
+  "keywords": [
+    "lazy",
+    "pack"
+  ],
+  "author": "jinrui",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jerrykingxyz/lazypack/issues"
+  },
+  "homepage": "https://github.com/jerrykingxyz/lazypack#readme"
+}
