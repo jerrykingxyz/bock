@@ -1,48 +1,65 @@
+const { isObject } = require('../utils');
+
 const pluginRules = {
   rules: {
     default: '*',
     format: function (e) {
-      return typeof e === 'string' || Array.isArray(e);
+      // transform to function
+      if (typeof e === 'string') {
+        return e === '*' ? () => true : ext => ext === e;
+      }
+      if (Array.isArray(e)) {
+        return ext => e.indexOf(ext) !== -1;
+      }
+      if (typeof e !== 'function') {
+        throw new Error('plugin rules format error');
+      }
+
+      return e;
     }
   },
   main: {
-    format: 'function'
+    format: function (e) {
+      if (typeof e !== 'function') {
+        throw new Error('plugin main function format error');
+      }
+
+      return e;
+    }
   }
 };
 
 const configRules = {
   plugins: {
+    default: [],
     format: function (e) {
-      const ok = Array.isArray(e);
-      if (ok) {
-        for(const plugin of e) {
-          checkFormat('plugin', plugin, pluginRules);
-        }
+      if (!Array.isArray(e)) {
+        throw new Error('config plugins must be a array');
       }
-      return ok;
+
+      for(const plugin of e) {
+        if (!isObject(plugin)) throw new Error('plugin must be a object');
+        checkFormat(plugin, pluginRules);
+      }
+
+      return e;
     }
   }
 };
 
-const checkFormat = function (errorTitle, obj, rules) {
-  if (typeof obj !== 'object' || obj === null) throw new Error(`${errorTitle} must be a object`);
-
-  for (const k of Object.keys(rules)) {
-    const v = rules[k];
-    // set default value
-    if (typeof obj[k] === 'undefined') {
-      obj[k] = v.default;
-    }
+const checkFormat = function (obj, rules) {
+  for (const key of Object.keys(rules)) {
+    const value = rules[key];
+    const objValue = obj[key];
     // check format
-    const ok = typeof v.format === 'string' ? typeof obj[k] === v.format : v.format(obj[k]);
-    if (!ok) {
-      throw new Error(`${errorTitle} ${k} format error`)
-    }
+    obj[key] = value.format(typeof objValue === 'undefined' ? value.default : objValue);
   }
 };
 
 const checkConfigFormat = function (config) {
-  checkFormat('config', config, configRules);
+  if (!isObject(config)) throw new Error('config must be a object');
+
+  checkFormat(config, configRules);
 };
 
 module.exports = checkConfigFormat;

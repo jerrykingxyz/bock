@@ -1,13 +1,12 @@
 const path = require('path');
 const Context = require('./Context');
 const { plugins } = global.config;
-const { checkExtRule } = require('../utils');
 
 class PluginStream {
 
   constructor (filepath) {
     const ext = path.extname(filepath).substr(1);
-    this.queue = plugins.filter(e => checkExtRule(ext, e.rules));
+    this.queue = plugins.filter(e => e.rules(ext));
     this.context = new Context();
     this.next = this.nextPlugin.bind(this);
   }
