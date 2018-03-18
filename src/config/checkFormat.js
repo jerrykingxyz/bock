@@ -1,29 +1,48 @@
-const checkPluginFormat = function (plugin) {
-  if (typeof plugin !== 'object' || plugin === null) {
-    throw new Error('plugin must a object');
+const pluginRules = {
+  rules: {
+    default: '*',
+    format: function (e) {
+      return typeof e === 'string' || Array.isArray(e);
+    }
+  },
+  main: {
+    format: 'function'
   }
+};
 
-  // rules format check
-  if (typeof plugin.rules === 'undefined') {
-    plugin.rules = '*';
+const configRules = {
+  plugins: {
+    format: function (e) {
+      const ok = Array.isArray(e);
+      if (ok) {
+        for(const plugin of e) {
+          checkFormat('plugin', plugin, pluginRules);
+        }
+      }
+      return ok;
+    }
   }
-  if (typeof plugin.rules !== 'string' && !Array.isArray(plugin.rules)) {
-    throw new Error('plugin rules format error')
-  }
+};
 
-  // main function format check
-  if (typeof plugin.main !== 'function') {
-    throw new Error('plugin main function format error')
+const checkFormat = function (errorTitle, obj, rules) {
+  if (typeof obj !== 'object' || obj === null) throw new Error(`${errorTitle} must be a object`);
+
+  for (const k of Object.keys(rules)) {
+    const v = rules[k];
+    // set default value
+    if (typeof obj[k] === 'undefined') {
+      obj[k] = v.default;
+    }
+    // check format
+    const ok = typeof v.format === 'string' ? typeof obj[k] === v.format : v.format(obj[k]);
+    if (!ok) {
+      throw new Error(`${errorTitle} ${k} format error`)
+    }
   }
 };
 
 const checkConfigFormat = function (config) {
-  if (!Array.isArray(config.plugins)) {
-    throw new Error('config plugins must be a array');
-  }
-  for(const plugin of config.plugins) {
-    checkPluginFormat(plugin)
-  }
+  checkFormat('config', config, configRules);
 };
 
 module.exports = checkConfigFormat;
