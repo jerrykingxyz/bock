@@ -1,5 +1,6 @@
 module.exports = {
   rules: '*',
-  main: function () {
+  main: async function (ctx, next) {
+    await next();
   }
 };
