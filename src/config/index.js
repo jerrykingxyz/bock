@@ -1,20 +1,18 @@
 const defaultConfig = require('./defaultConfig');
 const checkFormat = require('./checkFormat');
 
-const generateConfig = function (configPath) {
-  const config = Object.assign({}, defaultConfig);
+const generateConfig = function (config) {
+  const result = Object.assign({}, defaultConfig);
 
-  if (typeof configPath === 'object') {
-    Object.assign(config, configPath);
-  } else if (typeof configPath === 'string') {
-    const userConfig = require(configPath);
-    if (typeof userConfig === 'object') {
-      Object.assign(config, userConfig);
-    }
+  if (typeof config === 'string') {
+    config = require(config);
+  }
+  if (typeof config === 'object') {
+    Object.assign(result, config);
   }
 
-  checkFormat(config);
-  return config;
+  checkFormat(result);
+  return result;
 };
 
 module.exports = { defaultConfig, generateConfig };
