@@ -1,6 +1,15 @@
 const path = require('path');
 const { isObject } = require('../utils');
 
+const checkObject = function (obj, rules) {
+  for (const key of Object.keys(rules)) {
+    const value = rules[key];
+    const objValue = obj[key];
+    // check format
+    obj[key] = value.format(typeof objValue === 'undefined' ? value.default : objValue);
+  }
+};
+
 const pluginRules = {
   rules: {
     default: '*',
@@ -58,7 +67,7 @@ const configRules = {
 
       for(const plugin of e) {
         if (!isObject(plugin)) throw new Error('plugin must be a object');
-        checkFormat(plugin, pluginRules);
+        checkObject(plugin, pluginRules);
       }
 
       return e;
@@ -66,19 +75,4 @@ const configRules = {
   }
 };
 
-const checkFormat = function (obj, rules) {
-  for (const key of Object.keys(rules)) {
-    const value = rules[key];
-    const objValue = obj[key];
-    // check format
-    obj[key] = value.format(typeof objValue === 'undefined' ? value.default : objValue);
-  }
-};
-
-const checkConfigFormat = function (config) {
-  if (!isObject(config)) throw new Error('config must be a object');
-
-  checkFormat(config, configRules);
-};
-
-module.exports = checkConfigFormat;
+module.exports = { pluginRules, configRules, checkObject };

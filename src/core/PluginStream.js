@@ -1,6 +1,6 @@
 const path = require('path');
 const Context = require('./Context');
-const { plugins } = global.config;
+const { plugins } = require('../config');
 
 class PluginStream {
 

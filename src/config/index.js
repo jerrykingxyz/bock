@@ -1,8 +1,9 @@
 const defaultConfig = require('./defaultConfig');
-const checkFormat = require('./checkFormat');
+const { configRules, checkObject } = require('./formatRules');
 
-const generateConfig = function (config) {
-  const result = Object.assign({}, defaultConfig);
+const setConfig = function (config) {
+  // this pointer to exports config object
+  const result = {};
 
   if (typeof config === 'string') {
     config = require(config);
@@ -10,9 +11,18 @@ const generateConfig = function (config) {
   if (typeof config === 'object') {
     Object.assign(result, config);
   }
+  checkObject(result, configRules);
 
-  checkFormat(result);
-  return result;
+  for (const key of Object.keys(defaultConfig)) {
+    this[key] = result[key];
+  }
+
+  return this;
 };
 
-module.exports = { defaultConfig, generateConfig };
+const config = Object.create(defaultConfig);
+Object.defineProperty(config, 'setConfig', {
+  value: setConfig
+});
+
+module.exports = config;
