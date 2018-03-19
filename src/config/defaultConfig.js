@@ -1,3 +1,4 @@
 module.exports = {
+  input: [],
   plugins: []
 };

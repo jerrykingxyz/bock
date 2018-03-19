@@ -1,3 +1,4 @@
+const path = require('path');
 const { isObject } = require('../utils');
 
 const pluginRules = {
@@ -30,6 +31,24 @@ const pluginRules = {
 };
 
 const configRules = {
+  input: {
+    default: [],
+    format: function (e) {
+      if (typeof e === 'string') {
+        return [ path.resolve(e) ];
+      }
+      if (!Array.isArray(e)) {
+        throw new Error('config input format error');
+      }
+
+      return e.map(function (filepath) {
+        if (typeof filepath !== 'string') {
+          throw new Error('config input item must be string');
+        }
+        return path.resolve(filepath);
+      });
+    }
+  },
   plugins: {
     default: [],
     format: function (e) {
