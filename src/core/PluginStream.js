@@ -6,11 +6,11 @@ class PluginStream {
 
   constructor (filepath) {
     const ext = path.extname(filepath).substr(1);
-    this.filepath = filepath;
+    this.context = new Context(filepath);
     this.queue = plugins.filter(e => e.rules(ext));
     this.next = this.nextPlugin.bind(this);
 
-    this.start().catch(function (err) {
+    this.next().catch(function (err) {
       console.error(`${filepath} packaging error: ${err}`);
     })
   }
@@ -21,11 +21,6 @@ class PluginStream {
       await fn(this.context, this.next);
       this.queue.shift();
     }
-  }
-
-  async start () {
-    this.context = new Context(this.filepath);
-    await this.next();
   }
 
 }
