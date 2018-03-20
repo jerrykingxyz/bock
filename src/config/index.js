@@ -1,12 +1,13 @@
+const path = require('path');
 const defaultConfig = require('./defaultConfig');
 const { configRules, checkObject } = require('./formatRules');
 
 const setConfig = function (config) {
   // this pointer to exports config object
-  const result = {};
+  const result = Object.create(defaultConfig);
 
   if (typeof config === 'string') {
-    config = require(config);
+    config = require(path.resolve(config));
   }
   if (typeof config === 'object') {
     Object.assign(result, config);
