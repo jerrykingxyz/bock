@@ -11,7 +11,7 @@ class PluginStream {
     this.next = this.nextPlugin.bind(this);
 
     this.next().catch(function (err) {
-      console.error(`${filepath} packaging error: ${err}`);
+      console.error(`${filepath} packaging error: ${err.message}`);
     })
   }
 
