@@ -4,8 +4,11 @@ const PluginStream = require('./core/PluginStream');
 const lazypack = function (configPath) {
   config.setConfig(configPath);
 
-  for(const item of config.input) {
-    new PluginStream(item);
+  for(const filepath of config.input) {
+    const stream = new PluginStream(filepath);
+    stream.start().catch(function (err) {
+      console.error(`${filepath} packaging error: ${err.message}`);
+    });
   }
 };
 

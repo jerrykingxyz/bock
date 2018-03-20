@@ -9,10 +9,6 @@ class PluginStream {
     this.context = new Context(filepath);
     this.queue = plugins.filter(e => e.rules(ext));
     this.next = this.nextPlugin.bind(this);
-
-    this.next().catch(function (err) {
-      console.error(`${filepath} packaging error: ${err.message}`);
-    })
   }
 
   async nextPlugin () {
@@ -21,6 +17,10 @@ class PluginStream {
       await fn(this.context, this.next);
       this.queue.shift();
     }
+  }
+
+  start () {
+    return this.next();
   }
 
 }
