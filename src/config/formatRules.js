@@ -1,6 +1,12 @@
 const path = require('path');
 const { isObject } = require('../utils');
 
+/**
+ * check whether the object conforms to the format
+ * format if the condition is met, otherwise throw an error
+ * @param obj
+ * @param rules
+ */
 const checkObject = function (obj, rules) {
   for (const key of Object.keys(rules)) {
     const value = rules[key];
