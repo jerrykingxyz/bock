@@ -1,3 +1,3 @@
 describe('lazy pack test', function () {
-  require('./config');
+  require('./config/index.test.js');
 });
