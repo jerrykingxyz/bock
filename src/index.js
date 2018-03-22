@@ -7,9 +7,7 @@ const lazypack = function (configPath) {
 
   for(const filepath of config.input) {
     const stream = new PluginStream(filepath);
-    stream.start().catch(function (err) {
-      console.error(`${filepath} packaging error: ${err.message}`);
-    });
+    stream.start()
   }
 };
 
