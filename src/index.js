@@ -1,5 +1,6 @@
 const config = require('./config');
 const PluginStream = require('./core/PluginStream');
+const plugins = require('./plugin');
 
 const lazypack = function (configPath) {
   config.setConfig(configPath);
@@ -12,4 +13,4 @@ const lazypack = function (configPath) {
   }
 };
 
-module.exports = lazypack;
+module.exports = Object.assign(lazypack, plugins);
