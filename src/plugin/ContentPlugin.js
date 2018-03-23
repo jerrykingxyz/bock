@@ -37,3 +37,5 @@ class ContentPlugin {
   }
 
 }
+
+module.exports = ContentPlugin;
