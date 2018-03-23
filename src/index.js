@@ -11,4 +11,6 @@ const lazypack = function (configPath) {
   }
 };
 
+lazypack.PluginStream = PluginStream;
+
 module.exports = Object.assign(lazypack, plugins);
