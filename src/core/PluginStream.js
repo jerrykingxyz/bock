@@ -19,7 +19,13 @@ class PluginStream {
   }
 
   start () {
-    return this.next();
+    const ret = this.next();
+    if (config.interactive) {
+      ret.catch(function (err) {
+        console.error(`${filepath} packaging error: ${err.message}`);
+      });
+    }
+    return ret;
   }
 
 }

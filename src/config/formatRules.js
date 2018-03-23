@@ -64,6 +64,12 @@ const configRules = {
       });
     }
   },
+  interactive: {
+    default: false,
+    format: function (e) {
+      return !!e;
+    }
+  },
   plugins: {
     default: [],
     format: function (e) {
