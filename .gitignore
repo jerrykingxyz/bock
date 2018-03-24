@@ -1,2 +1,11 @@
+# ingore ide_config
 .idea
+
+# ingore modeules
 node_modules
+
+# ingore package-lock
+package-lock.json
+
+# ingore npm config
+.npmrc
