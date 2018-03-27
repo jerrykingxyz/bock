@@ -3,6 +3,29 @@ const assert = require('assert');
 
 const DependentPlugin = require('../../src/plugin/DependentPlugin');
 
+const defaultConfig = {
+  ext: ['html'],
+  rules: {
+    html: (ctx) => {
+      let regexp = /(url\(|src=['"]|href=["'])([^'"()]*['")])/g;
+      let dependentTmp = ctx.content.match(regexp);
+      let dependentList = [];
+      if (dependentTmp) {
+        dependentTmp.forEach(obj => {
+          let Obj = obj.split(/["'()]/);
+          if (Obj[1].test(/(http:\/\/|https:\/\/|\/\/)/)) {
+            dependentList.push([Obj[1]]);
+          } else {
+            dependentList.push([Obj[1], path.join(ctx.filepath)]);
+          }
+
+        });
+      }
+      return dependentList;
+    },
+  },
+};
+
 const ctx = {
   content: `<img src="https://test.com/test1.png"/><img src='./test/test2.jpg'/>
     <link rel="stylesheet" href="../test/test2.css">
@@ -11,50 +34,29 @@ const ctx = {
     <div style="background: url(./test/test)"></div> 
     <script src="./test/data.js"></script> 
     <script src="./test1/data"></script> 
-    <script src='//test.com/test' /></script>
-    <script src='//test.com/test.js' /></script>
+    <script src='//test.com/test'></script>
+    <script src='//test.com/test.js'></script>
     </div> `,
-  filepath: '/base/demo/',
+  filepath: '/base/demo/test.html',
 };
 
 describe('dependent plugin test', function() {
 
-  let dependentPlugin1 = new DependentPlugin(['.css', '.js']);
+  let dependentPlugin = new DependentPlugin({
+    ext: ['html'],
+  });
 
-  it('setRegExp test', function() {
-
-    assert.ok(() => {
-      let x = dependentPlugin1.regExp;
-      let y = /(url\\(|src=['"]|href=["'])([^'"()]*(.css|.js)[?='")])/g;
-      return (x instanceof RegExp) && (y instanceof RegExp) &&
-          (x.source === y.source) && (x.global === y.global) &&
-          (x.ignoreCase === y.ignoreCase) && (x.multiline === y.multiline);
-    });
+  it('config test', function() {
+    assert.equal(dependentPlugin.toString(), defaultConfig.toString());
   });
 
   it('main function test1', async function() {
     let nextDone = false;
-    await dependentPlugin1.main(ctx, function() {
+    await dependentPlugin.main(ctx, function() {
       nextDone = true;
     });
-    assert.deepEqual(ctx.dependentList, [
-          ['../test/test2.css', '/base/test/test2.css'],
-          ['http://test.com/test2.css'],
-          ['./test/data.js', '/base/demo/test/data.js'],
-          ['//test.com/test.js'],
-        ],
-    );
-    assert.ok(nextDone);
-  });
-
-  let dependentPlugin2 = new DependentPlugin();
-
-  it('main function test2', async function() {
-    let nextDone = false;
-    await dependentPlugin2.main(ctx, function() {
-      nextDone = true;
-    });
-    assert.deepEqual(ctx.dependentList, [
+    console.log(ctx.dependent);
+    assert.deepEqual(ctx.dependent, [
           ['https://test.com/test1.png'],
           ['./test/test2.jpg', '/base/demo/test/test2.jpg'],
           ['../test/test2.css', '/base/test/test2.css'],
