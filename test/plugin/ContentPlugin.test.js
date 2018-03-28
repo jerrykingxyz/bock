@@ -6,10 +6,10 @@ const ContentPlugin = require('../../src/plugin/ContentPlugin');
 describe('content plugin test', function () {
 
   const ctx = new Context(path.resolve(__dirname, './data.txt'));
-  const contentPlugin = new ContentPlugin({rules: 'txt'});
+  const contentPlugin = new ContentPlugin({ext: 'txt'});
 
   it('config test', function () {
-    assert.equal(contentPlugin.config.rules, 'txt');
+    assert.equal(contentPlugin.config.ext, 'txt');
   });
 
   it('main file test', async function () {
