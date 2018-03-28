@@ -7,7 +7,7 @@ const fsReadFile = promisify(fs.readFile);
 const fsReaddir = promisify(fs.readdir);
 
 const defaultConfig = {
-  rules: ['html', 'htm', 'js', 'css', 'json'],
+  ext: ['html', 'htm', 'js', 'css', 'json'],
   maxContentSize: 5 * 1024 * 1024
 };
 
@@ -15,7 +15,7 @@ class ContentPlugin {
 
   constructor (config) {
     this.config = Object.assign({}, defaultConfig, config);
-    this.rules = this.config.rules;
+    this.ext = this.config.ext;
   }
 
   async main (ctx, next) {
