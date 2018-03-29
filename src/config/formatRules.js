@@ -17,7 +17,7 @@ const checkObject = function (obj, rules) {
 };
 
 const pluginRules = {
-  rules: {
+  ext: {
     default: '*',
     format: function (e) {
       // transform to function
@@ -28,7 +28,7 @@ const pluginRules = {
         return ext => e.indexOf(ext) !== -1;
       }
       if (typeof e !== 'function') {
-        throw new Error('plugin rules format error');
+        throw new Error('plugin ext format error');
       }
 
       return e;

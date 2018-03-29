@@ -8,42 +8,42 @@ describe('plugin stream test', function () {
     input: [],
     plugins: [
       {
-        rules: '*',
+        ext: '*',
         main: async function (ctx, next) {
           ctx.number = 0;
           await next();
         }
       },
       {
-        rules: 'txt',
+        ext: 'txt',
         main: async function (ctx, next) {
           ctx.number += 1;
           await next();
         }
       },
       {
-        rules: 'js',
+        ext: 'js',
         main: async function (ctx, next) {
           ctx.number += 2;
           await next();
         }
       },
       {
-        rules: 'css',
+        ext: 'css',
         main: async function (ctx, next) {
           ctx.number += 4;
           await next();
         }
       },
       {
-        rules: ['txt', 'css'],
+        ext: ['txt', 'css'],
         main: async function (ctx, next) {
           ctx.number += 8;
           await next();
         }
       },
       {
-        rules: 'err',
+        ext: 'err',
         main: async function () {
           throw new Error('error');
         }

@@ -14,7 +14,7 @@ const checkFormat = function(...args) {
 
 describe('plugin format test', function () {
   const plugin = {
-    rules: '*',
+    ext: '*',
     main: ()=>{}
   };
   const pluginCheck = function (obj, errorMsg) {
@@ -23,39 +23,39 @@ describe('plugin format test', function () {
     })
   };
 
-  it('rules can not be a object', async function () {
-    plugin.rules = {};
-    await pluginCheck(plugin, 'plugin rules format error');
-    plugin.rules = '*';
+  it('ext can not be a object', async function () {
+    plugin.ext = {};
+    await pluginCheck(plugin, 'plugin ext format error');
+    plugin.ext = '*';
   });
 
-  it('rules can not be a number', async function () {
-    plugin.rules = 1;
-    await pluginCheck(plugin, 'plugin rules format error');
-    plugin.rules = '*';
+  it('ext can not be a number', async function () {
+    plugin.ext = 1;
+    await pluginCheck(plugin, 'plugin ext format error');
+    plugin.ext = '*';
   });
 
-  it('rules can be a array', async function () {
-    plugin.rules = ['txt'];
+  it('ext can be a array', async function () {
+    plugin.ext = ['txt'];
     await pluginCheck(plugin);
-    plugin.rules = '*';
+    plugin.ext = '*';
   });
 
-  it('rules format array', async function () {
-    plugin.rules = ['txt', 'js'];
+  it('ext format array', async function () {
+    plugin.ext = ['txt', 'js'];
     await pluginCheck(plugin);
-    assert.ok(plugin.rules('txt'));
-    assert.ok(plugin.rules('js'));
-    assert.ok(!plugin.rules('css'));
-    plugin.rules = '*';
+    assert.ok(plugin.ext('txt'));
+    assert.ok(plugin.ext('js'));
+    assert.ok(!plugin.ext('css'));
+    plugin.ext = '*';
   });
 
-  it('rules format string', async function () {
-    plugin.rules = 'txt';
+  it('ext format string', async function () {
+    plugin.ext = 'txt';
     await pluginCheck(plugin);
-    assert.ok(plugin.rules('txt'));
-    assert.ok(!plugin.rules('js'));
-    plugin.rules = '*';
+    assert.ok(plugin.ext('txt'));
+    assert.ok(!plugin.ext('js'));
+    plugin.ext = '*';
   });
 
   it('main can not be a string', async function () {
