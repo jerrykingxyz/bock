@@ -9,10 +9,10 @@ describe('content plugin test', function () {
   const contentPlugin = new ContentPlugin({ext: 'txt'});
 
   it('config test', function () {
-    assert.equal(contentPlugin.config.ext, 'txt');
+    assert.equal(contentPlugin.ext, 'txt');
   });
 
-  it('main file test', async function () {
+  it('main function test', async function () {
     let nextDone = false;
     await contentPlugin.main(ctx, function () {
       nextDone = true;
