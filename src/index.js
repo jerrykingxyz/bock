@@ -1,11 +1,16 @@
-const Lazypack = require('./Lazypack');
+const config = require('./config');
 const PluginStream = require('./core/PluginStream');
 const plugins = require('./plugin');
 
-const factory = function (...args) {
-  return new Lazypack(...args);
+const lazypack = function (configPath) {
+  config.setConfig(configPath);
+
+  for(const filepath of config.input) {
+    const stream = new PluginStream(filepath);
+    stream.start()
+  }
 };
 
-factory.PluginStream = PluginStream;
+lazypack.PluginStream = PluginStream;
 
-module.exports = Object.assign(factory, plugins);
+module.exports = Object.assign(lazypack, plugins);
